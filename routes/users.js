@@ -14,22 +14,17 @@ router.get('/', async function (req, res) {
   res.send(users);
 });
 
-router.post("/", authMiddleware, function (req, res) {
-  const { first_name, last_name, email_address, phone, password } = req.body;
-  bcrypt.hash(password, SALT_ROUNDS, async function(err, hash) {
-    if(err) res.status(500).send(err);
-    else {
-      const user = await User.create({
-        first_name,
-        last_name,
-        email_address,
-        phone,
-        password: hash,
-        apiKey: uuid.v4(),
-      });
-      res.send(user);
-    }
-  });
+router.post('/', async function (req, res) {
+  const { first_name, last_name, email_address, phone, password } =req.body;
+  const user = await User.create({
+    first_name,
+    last_name,
+    email_address,
+    phone,
+    password,
+    apiKey: Date.now()
+  })
+  res.send(user)
 });
 
 router.get('/:id', async function (req, res) {

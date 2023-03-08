@@ -12,7 +12,7 @@ function relate() {
     Drink.belongsTo(User);
 
     Drink.belongsToMany(Category, { through: "drinks_categories" });
-    Ingredient.belongsToMany(Drink, { through: "drinks_categories" })
+    Category.belongsToMany(Drink, { through: "drinks_categories" })
 
     Drink.belongsToMany(Ingredient, { through: "drinks_ingredients" });
     Ingredient.belongsToMany(Drink, { through: "drinks_ingredients" })
