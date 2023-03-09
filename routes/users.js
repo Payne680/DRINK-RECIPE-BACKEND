@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const uuid = require("uuid");
 
 const User = require('../database/user');
-const { SALT_ROUNDS } = require("../services/constants");
 const { authMiddleware } = require("../services/auth");
 
 var router = express.Router();
@@ -15,16 +14,22 @@ router.get('/', async function (req, res) {
 });
 
 router.post('/', async function (req, res) {
-  const { first_name, last_name, email_address, phone, password } =req.body;
-  const user = await User.create({
-    first_name,
-    last_name,
-    email_address,
-    phone,
-    password,
-    apiKey: Date.now()
+  const { first_name, last_name, email_address, phone, password } = req.body;
+  bcrypt.hash(password, 5, async function(err, hash){
+    if(err) res.status(500).send(err)
+    else{
+    const user = await User.create({
+      first_name,
+      last_name,
+      email_address,
+      phone,
+      password: hash,
+      api_key: uuid.v4(),
+    })
+    res.send(user)
+  }
+  console.log(err);
   })
-  res.send(user)
 });
 
 router.get('/:id', async function (req, res) {
@@ -32,7 +37,7 @@ router.get('/:id', async function (req, res) {
   res.send(user);
 });
 
-router.put("/:id", async function (req, res) {
+router.put("/:id", authMiddleware, async function (req, res) {
   const { first_name, last_name, email_address, phone, password } =req.body;
   const user = await User.update({
     first_name,
@@ -70,7 +75,7 @@ router.delete('/:id', async function (req, res) {
       id: req.params.id,
     }
   })
-  res.send("status: success");
+  res.json("status: success");
 });
 
 module.exports = router;
