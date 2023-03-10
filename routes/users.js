@@ -25,10 +25,10 @@ router.post('/', async function (req, res) {
       phone,
       password: hash,
       api_key: uuid.v4(),
+      is_admin: false,
     })
     res.send(user)
   }
-  console.log(err);
   })
 });
 
@@ -37,7 +37,7 @@ router.get('/:id', async function (req, res) {
   res.send(user);
 });
 
-router.put("/:id", authMiddleware, async function (req, res) {
+router.put("/:id", async function (req, res) {
   const { first_name, last_name, email_address, phone, password } =req.body;
   const user = await User.update({
     first_name,

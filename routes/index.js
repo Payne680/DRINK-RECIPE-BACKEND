@@ -34,7 +34,7 @@ router.post("/login", async (req, res) => {
   });
 });
 
-router.get("/current-user", authMiddleware, (req, res) => {
+router.get("/current-user", (req, res) => {
   res.send(req.user);
 });
 
