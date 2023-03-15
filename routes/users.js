@@ -1,81 +1,101 @@
-const express = require('express');
-const bcrypt = require("bcrypt");
-const uuid = require("uuid");
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - email_address
+ *         - password
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the book
+ *         first_name:
+ *           type: string
+ *           description: The firstName of the user
+ *         last_name:
+ *           type: string
+ *           description: The lasttName of the user
+ *         email_address:
+ *           type: string
+ *           description: The password of the user
+ *         password:
+ *           type: string
+ *           description: The password of the user
+ *         is_admin:
+ *           type: boolean
+ *           description: Whether you have finished reading the book
+ *         createdAt:
+ *           type: string
+ *           format: date
+ *           description: The date the book was added
+ *         updatedAt:
+ *           type: string
+ *           format: date
+ *           description: The date the book was updated
+ *       example:
+ *         id: 1
+ *         first_name: Rash
+ *         last_name: Lahfen
+ *         email_address: rash237@gmail.com
+ *         is_admin: false
+ *         password: rashking
+ *         createdAt: 2020-03-10T04:05:06.157Z
+ *         updatedAt: 2020-03-10T04:05:06.157Z
+ */
 
-const User = require('../database/user');
-const { authMiddleware } = require("../services/auth");
+
+
+
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: The users managing API
+ * /users:
+ *   post:
+ *     summary: Create a new user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: The created user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Some server error
+ *
+ */
+
+
+
+
+const express = require('express');
+
+const { getAllUsers, updateUsers, getOneUser, addOneUser, updateOneUser, deleteOneUser } = require('../Controllers/UsersCtrl');
+
 
 var router = express.Router();
 
 /* GET users listing. */
-router.get('/', async function (req, res) {
-  const users = await User.findAll()
-  res.send(users);
-});
+router.get('/', getAllUsers);
 
-router.post('/', async function (req, res) {
-  const { first_name, last_name, email_address, phone, password } = req.body;
-  bcrypt.hash(password, 5, async function(err, hash){
-    if(err) res.status(500).send(err)
-    else{
-    const user = await User.create({
-      first_name,
-      last_name,
-      email_address,
-      phone,
-      password: hash,
-      api_key: uuid.v4(),
-      is_admin: false,
-    })
-    res.send(user)
-  }
-  })
-});
+router.post('/', updateUsers);
 
-router.get('/:id', async function (req, res) {
-  const user = await User.findByPk(req.params.id)
-  res.send(user);
-});
+router.get('/:id', getOneUser);
 
-router.put("/:id", async function (req, res) {
-  const { first_name, last_name, email_address, phone, password } =req.body;
-  const user = await User.update({
-    first_name,
-    last_name,
-    email_address,
-    phone,
-    password,
-  },{
-    where:{
-      id:req.params.id
-    }
-  });
-  res.send(user);
-});
+router.put("/:id", addOneUser);
 
-router.patch("/:id", async function (req, res) {
-  const { first_name, last_name, email_address, phone, password } =req.body;
-  const user = await User.update({
-    first_name,
-    last_name,
-    email_address,
-    phone,
-    password,
-  },{
-    where:{
-      id:req.params.id
-    }
-  });
-  res.send(user);
-});
+router.patch("/:id", updateOneUser);
 
-router.delete('/:id', async function (req, res) {
-   await User.destroy({
-    where: {
-      id: req.params.id,
-    }
-  })
-  res.json("status: success");
-});
+router.delete('/:id', deleteOneUser);
 
 module.exports = router;

@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 const dotEnv = require('dotenv')
+const swaggerUi = require("swagger-ui-express");
 dotEnv.config();
 
 
@@ -15,6 +16,7 @@ const categoryRouter = require('./routes/category')
 const ingredientsRouter = require('./routes/ingredients')
 const glassRouter = require('./routes/glass')
 const relate = require('./database/relationships')
+const specs = require('./services/swagger')
 
 const app = express();
 relate();
@@ -23,6 +25,11 @@ relate();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(specs, { explorer: true })
+);
 app.use(logger('dev'));
 app.use(express.json());
 app.use(cors())
