@@ -8,7 +8,7 @@ const authMiddleware = async (req, res, next) => {
     if (token) {
         try {
             const { data } = verifyToken(token);
-            const user =  await User.findByPk(data.id);
+            const user = await User.findByPk(data.id);
             if (!user) return res.sendStatus(401);
             req.user = user;
             next();

@@ -40,7 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/drinks', drinksRouter);
-app.use('/category', categoryRouter);
+app.use('/categories', categoryRouter);
 app.use('/ingredients', ingredientsRouter);
 app.use('/glasses', glassRouter);
 

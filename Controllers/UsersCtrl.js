@@ -33,7 +33,7 @@ const getOneUser = async function (req, res) {
     res.send(user);
 }
 
-const addOneUser = async function (req, res) {
+const updateOneUser = async function (req, res) {
     const { first_name, last_name, email_address, phone, password } = req.body;
     const user = await User.update({
         first_name,
@@ -49,7 +49,7 @@ const addOneUser = async function (req, res) {
     res.send(user);
 }
 
-const updateOneUser = async function (req, res) {
+const addOneUser = async function (req, res) {
     const { first_name, last_name, email_address, phone, password } = req.body;
     const user = await User.update({
         first_name,
