@@ -150,6 +150,7 @@
 const express = require('express');
 
 const { getAllUsers, updateUsers, getOneUser, addOneUser, updateOneUser, deleteOneUser } = require('../Controllers/UsersCtrl');
+const { authMiddleware } = require('../services/auth');
 
 
 var router = express.Router();
@@ -157,14 +158,14 @@ var router = express.Router();
 /* GET users listing. */
 router.get('/', getAllUsers);
 
-router.post('/', updateUsers);
+router.post('/', authMiddleware, updateUsers);
 
 router.get('/:id', getOneUser);
 
-router.put("/:id", updateOneUser);
+router.put("/:id", authMiddleware, updateOneUser);
 
-router.patch("/:id", addOneUser);
+router.patch("/:id", authMiddleware, addOneUser);
 
-router.delete('/:id', deleteOneUser);
+router.delete('/:id', authMiddleware, deleteOneUser);
 
 module.exports = router;
