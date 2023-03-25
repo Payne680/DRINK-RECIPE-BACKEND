@@ -139,17 +139,18 @@
 
 const express = require("express");
 const { getAllIngredients, updateAllIngredients, updateOneIngredient, addOneIngredient, deleteOneIngredient, getOneIngredient } = require("../Controllers/IngredientsCtrl");
+const { authMiddleware } = require("../services/auth");
 const router = express.Router();
 
 router.get("/", getAllIngredients);
 
-router.post("/", updateAllIngredients);
+router.post("/", authMiddleware, updateAllIngredients);
 
 router.get('/:id', getOneIngredient);
 
-router.put("/:id", updateOneIngredient);
+router.put("/:id", authMiddleware, updateOneIngredient);
 
-router.patch("/:id", addOneIngredient);
+router.patch("/:id", authMiddleware, addOneIngredient);
 
-router.delete("/:id", deleteOneIngredient);
+router.delete("/:id", authMiddleware, deleteOneIngredient);
 module.exports = router;
