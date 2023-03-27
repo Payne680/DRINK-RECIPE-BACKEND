@@ -144,7 +144,7 @@ const router = express.Router();
 
 router.get("/", getAllIngredients);
 
-router.post("/", authMiddleware, updateAllIngredients);
+router.post("/", authMiddleware,  updateAllIngredients);
 
 router.get('/:id', getOneIngredient);
 

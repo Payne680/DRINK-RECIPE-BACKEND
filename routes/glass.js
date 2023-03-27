@@ -135,17 +135,18 @@
 
 const express = require("express");
 const { getAllGlasses, updateAllGlasses, updateOneGlass, addOneGlass, deleteOneGlass, getOneGlass } = require("../Controllers/GlassCtrl");
+const { authMiddleware } = require("../services/auth");
 const router = express.Router();
 
 router.get("/", getAllGlasses);
 
-router.post("/", updateAllGlasses);
+router.post("/", authMiddleware, updateAllGlasses);
 
 router.get('/:id', getOneGlass);
 
-router.put("/:id", updateOneGlass);
+router.put("/:id", authMiddleware, updateOneGlass);
 
-router.patch("/:id", addOneGlass);
+router.patch("/:id", authMiddleware, addOneGlass);
 
-router.delete("/:id", deleteOneGlass);
+router.delete("/:id", authMiddleware, deleteOneGlass);
 module.exports = router;
