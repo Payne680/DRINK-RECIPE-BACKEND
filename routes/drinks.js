@@ -146,14 +146,15 @@
 
 const express = require("express");
 const { getAllDrinks, updateAllDrinks, getOneDrink, updateOneDrink, addOneDrink, deleteOneDrink } = require("../Controllers/DrinkCtrl");
+const { authMiddleware } = require("../services/auth");
 const router = express.Router();
 router.get("/", getAllDrinks);
 
-router.post("/", updateAllDrinks);
+router.post("/", authMiddleware, updateAllDrinks);
 
 router.get('/:id', getOneDrink);
 
-router.put("/:id", updateOneDrink);
-router.patch("/:id", addOneDrink);
-router.delete("/:id", deleteOneDrink);
+router.put("/:id", authMiddleware, updateOneDrink);
+router.patch("/:id", authMiddleware, addOneDrink);
+router.delete("/:id", authMiddleware, deleteOneDrink);
 module.exports = router;
