@@ -139,18 +139,19 @@
 
 const express = require("express");
 const { deleteOneCategory, getAllCategories, updateAllCategories, updateOneCategory, addOneCategory, getOneCategories } = require("../Controllers/CategoryCtrl");
+const { authMiddleware } = require("../services/auth");
 const router = express.Router();
 
 router.get("/", getAllCategories);
 
 
-router.post("/", updateAllCategories);
+router.post("/", authMiddleware, updateAllCategories);
 
-router.put("/:id", updateOneCategory);
+router.put("/:id", authMiddleware, updateOneCategory);
 
 router.get('/:id', getOneCategories);
 
-router.patch("/:id", addOneCategory);
+router.patch("/:id", authMiddleware, addOneCategory);
 
-router.delete("/:id", deleteOneCategory);
+router.delete("/:id", authMiddleware, deleteOneCategory);
 module.exports = router;
